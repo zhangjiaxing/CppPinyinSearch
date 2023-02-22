@@ -83,3 +83,15 @@ void PinyinDict::printDict(){
 
     }
 }
+
+PinyinDict::Pinyins PinyinDict::getPinyins(char32_t unichar){
+    return this->data.at(unichar);
+}
+
+std::list<PinyinDict::Pinyins> PinyinDict::getPinyinsList(std::u32string_view unistring){
+    std::list<Pinyins> pinyinsList;
+    for(char32_t unichar : unistring){
+        pinyinsList.push_back(this->getPinyins(unichar));
+    }
+    return pinyinsList;
+}
