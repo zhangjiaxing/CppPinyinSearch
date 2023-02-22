@@ -9,11 +9,10 @@ class PhoneticConvert
 public:
     PhoneticConvert();
 
-
 private:
     struct _PhoneticConvertData{
-        std::string from;
-        std::string to;
+        const char* from;
+        const char* to;
     };
     static const struct _PhoneticConvertData *phoneticConvertList;
 
