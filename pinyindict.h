@@ -14,9 +14,11 @@ public:
     PinyinDict();
 
     int loadFile(const char* filename);
-    void printDict();
     Pinyins getPinyins(char32_t unichar);
     std::list<Pinyins> getPinyinsList(std::u32string_view unistring);
+
+    void printDict();
+    static void printPinyins(Pinyins pinyins);
 
 private:
     std::map<char32_t, Pinyins> data;
