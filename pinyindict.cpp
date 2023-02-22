@@ -70,22 +70,13 @@ int PinyinDict::loadFile(const char* filename){
     return this->data.size();
 }
 
-void PinyinDict::printDict(){
-    for(auto iter = this->data.cbegin(); iter != this->data.cend(); iter++){
-        std::cout << iter->first << ": ";
-        auto &pinyinList = iter->second;
-
-        for(auto pinyinIter = pinyinList.cbegin(); pinyinIter != pinyinList.cend(); pinyinIter++){
-            std::cout << *pinyinIter << ";";
-        }
-
-        std::cout << std::endl;
-
-    }
-}
 
 PinyinDict::Pinyins PinyinDict::getPinyins(char32_t unichar){
-    return this->data.at(unichar);
+    auto iter = this->data.find(unichar);
+    if(iter == this->data.cend()){
+        return {};
+    }
+    return iter->second;
 }
 
 std::list<PinyinDict::Pinyins> PinyinDict::getPinyinsList(std::u32string_view unistring){
@@ -94,4 +85,27 @@ std::list<PinyinDict::Pinyins> PinyinDict::getPinyinsList(std::u32string_view un
         pinyinsList.push_back(this->getPinyins(unichar));
     }
     return pinyinsList;
+}
+
+
+void PinyinDict::printDict(){
+    for(auto iter = this->data.cbegin(); iter != this->data.cend(); iter++){
+        std::cout << iter->first << ": ";
+        auto &pinyinList = iter->second;
+
+        for(auto pinyinIter = pinyinList.cbegin(); pinyinIter != pinyinList.cend(); pinyinIter++){
+            std::cout << *pinyinIter << ",";
+        }
+
+        std::cout << std::endl;
+
+    }
+}
+
+
+void PinyinDict::printPinyins(Pinyins pinyins){
+    for(Pinyin pinyin : pinyins){
+        std::cout << pinyin << ",";
+    }
+    std::cout << ";";
 }

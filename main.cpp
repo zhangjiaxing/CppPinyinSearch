@@ -11,13 +11,16 @@ int main()
 
     PinyinDict py;
     py.loadFile("/home/zhiliao/source/python-pinyin/pinyin-data/pinyin.txt");
-    py.printDict();
+    //py.printDict();
 
-    std::list<std::string> pinyins = py.getPinyins(U'长');
+    PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
+    //py.printPinyins(pinyins);
 
-    for(std::string pinyin : pinyins){
-        std::cout << pinyin << ".";
+    auto pinyinsList = py.getPinyinsList(U"故人西辞黄鹤楼，烟花三月下扬州。");
+
+    for(PinyinDict::Pinyins pinyins : pinyinsList){
+        py.printPinyins(pinyins);
     }
-    std::cout << "\n";
+
     return 0;
 }
