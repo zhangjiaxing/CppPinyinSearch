@@ -7,12 +7,10 @@ using namespace std;
 
 int main()
 {
-    cout << "Hello World!" << endl;
-
     PinyinDict py;
-    py.loadFile("/home/zhiliao/source/python-pinyin/pinyin-data/pinyin.txt");
-    //py.printDict();
+    py.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
+    //py.printDict();
     //PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
     //py.printPinyins(pinyins);
 
