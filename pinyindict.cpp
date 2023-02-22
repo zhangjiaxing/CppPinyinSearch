@@ -46,28 +46,28 @@ int PinyinDict::loadFile(const char* filename){
             while(*pos != '#' && *pos != '\0'){
                 pos++;
 
-                if(*pos == ','){
-                    std::string pinyin(PinyinStart, pos-PinyinStart);
-                    pinyinList.push_back(pinyin);
-                    PinyinStart = pos+1;
-                }
-                while(std::isblank(*pos))  {
+                while(*pos == ',' || std::isblank(*pos)){
+                    if(pos != PinyinStart){
+                        std::string pinyin(PinyinStart, pos-PinyinStart);
+                        pinyinList.push_back(pinyin);
+                    }
+
                     pos++;
+                    PinyinStart = pos;
                 }
             }
 
-            std::string pinyin(PinyinStart, pos-PinyinStart);
-            if(not pinyin.empty()){
+            if(pos != PinyinStart){
+                std::string pinyin(PinyinStart, pos-PinyinStart);
                 pinyinList.push_back(pinyin);
             }
             if(not pinyinList.empty()){
                 this->data[uniChar] = pinyinList;
             }
         }
-
     }
 
-    return 0;
+    return this->data.size();
 }
 
 void PinyinDict::printDict(){
