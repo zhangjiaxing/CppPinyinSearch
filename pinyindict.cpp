@@ -12,6 +12,7 @@ PinyinDict::PinyinDict()
 
 }
 
+
 int PinyinDict::loadFile(const char* filename){
     std::ifstream pinyinFile;
     pinyinFile.open(filename, std::ios::in);
@@ -79,6 +80,12 @@ PinyinDict::Pinyins PinyinDict::getPinyins(char32_t unichar){
     return iter->second;
 }
 
+
+PinyinDict::Pinyins PinyinDict::getPinyinsTone2(char32_t unichar){
+
+}
+
+
 std::list<PinyinDict::Pinyins> PinyinDict::getPinyinsList(std::u32string_view unistring){
     std::list<Pinyins> pinyinsList;
     for(char32_t unichar : unistring){
@@ -105,7 +112,7 @@ void PinyinDict::printDict(){
 
 void PinyinDict::printPinyins(Pinyins pinyins){
     for(Pinyin pinyin : pinyins){
-        std::cout << pinyin << ",";
+        std::cout << pinyin << ", ";
     }
-    std::cout << ";";
+    std::cout << "; ";
 }

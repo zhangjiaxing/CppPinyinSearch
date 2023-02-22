@@ -15,6 +15,8 @@ public:
 
     int loadFile(const char* filename);
     Pinyins getPinyins(char32_t unichar);
+    Pinyins getPinyinsTone2(char32_t unichar);
+
     std::list<Pinyins> getPinyinsList(std::u32string_view unistring);
 
     void printDict();
@@ -22,6 +24,7 @@ public:
 
 private:
     std::map<char32_t, Pinyins> data;
+
 };
 
 #endif // PINYINDICT_H
