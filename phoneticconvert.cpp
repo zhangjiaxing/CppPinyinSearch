@@ -84,6 +84,26 @@ std::string PhoneticConvert::to_tone2(const char *pinyin){
 
 
 std::string PhoneticConvert::to_tone3(const char *pinyin){
+    std::string tone2 = to_tone2(pinyin);
+    std::string tone3;
 
+    const char *yin = tone2.c_str();
+    const char *tune = nullptr;
+
+    while(*yin != '\0'){
+        if(not isdigit(*yin)){
+            tone3.push_back(*yin);
+        }else{
+            if(tune != nullptr){
+                tone3.push_back(*tune);
+            }
+            tune = yin;
+        }
+        yin++;
+    }
+    if(tune != nullptr){
+        tone3.push_back(*tune);
+    }
+    return tone3;
 }
 
