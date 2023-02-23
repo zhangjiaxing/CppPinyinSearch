@@ -16,8 +16,11 @@ int main()
     py.printPinyins(pinyins);
 
     PhoneticConvert pconv;
-    auto tone2 = pconv.to_tone2(pinyins.back().c_str());
+    auto tone2 = pconv.to_tone3(pinyins.back().c_str());
     std::cout << "\ntone2: " << tone2 << std::endl;
+
+    auto tone3 = pconv.to_tone3(pinyins.back().c_str());
+    std::cout << "\ntone3: " << tone3 << std::endl;
 
 
     auto pinyinsList = py.getPinyinsList(U"故人西辞黄鹤楼，烟花三月下扬州。");
