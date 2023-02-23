@@ -13,14 +13,16 @@ int main()
 
     //py.printDict();
     PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
-    py.printPinyins(pinyins);
+    //py.printPinyins(pinyins);
+    std::cout << "pinyin:\t" << pinyins.front() << std::endl;
+
 
     PhoneticConvert pconv;
-    auto tone2 = pconv.to_tone3(pinyins.back().c_str());
-    std::cout << "\ntone2: " << tone2 << std::endl;
+    auto tone2 = pconv.to_tone2(pinyins.front().c_str());
+    std::cout << "tone2:\t" << tone2 << std::endl;
 
-    auto tone3 = pconv.to_tone3(pinyins.back().c_str());
-    std::cout << "\ntone3: " << tone3 << std::endl;
+    auto tone3 = pconv.to_tone3(pinyins.front().c_str());
+    std::cout << "tone3:\t" << tone3 << std::endl;
 
 
     auto pinyinsList = py.getPinyinsList(U"故人西辞黄鹤楼，烟花三月下扬州。");
