@@ -1,5 +1,6 @@
 #include <iostream>
 #include "pinyindict.h"
+#include "phoneticconvert.h"
 
 
 
@@ -11,8 +12,13 @@ int main()
     py.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
     //py.printDict();
-    //PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
-    //py.printPinyins(pinyins);
+    PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
+    py.printPinyins(pinyins);
+
+    PhoneticConvert pconv;
+    auto tone2 = pconv.to_tone2(pinyins.back().c_str());
+    std::cout << "\ntone2: " << tone2 << std::endl;
+
 
     auto pinyinsList = py.getPinyinsList(U"故人西辞黄鹤楼，烟花三月下扬州。");
 
