@@ -1,6 +1,9 @@
 #include "phoneticconvert.h"
+#include <iostream>
 
-const PhoneticConvert::_PhoneticConvertData *PhoneticConvert::phoneticConvertList = nullptr;
+//const PhoneticConvert::_PhoneticConvertData *PhoneticConvert::phoneticConvertList = nullptr;
+std::map<const std::string_view, const char*> *PhoneticConvert::phoneticConvertMap = nullptr;
+
 
 PhoneticConvert::PhoneticConvert()
 {
@@ -42,8 +45,45 @@ PhoneticConvert::PhoneticConvert()
         {"ế", "ê2"},
         {"ê̌", "ê3"},  // len('ê̌') == 2
         {"ề", "ê4"},
-        {nullptr, nullptr},
     };
 
-    PhoneticConvert::phoneticConvertList = _phoneticConvertList;
+    //PhoneticConvert::phoneticConvertList = _phoneticConvertList;
+    PhoneticConvert::phoneticConvertMap = new std::map<const std::string_view, const char*>;
+    for(struct _PhoneticConvertData d : _phoneticConvertList){
+        (*PhoneticConvert::phoneticConvertMap)[d.from] = d.to;
+    }
 }
+
+
+std::string PhoneticConvert::to_tone2(const char *pinyin){
+    std::string tone2;
+    const char *p = pinyin;
+    while(*p != '\0'){
+        std::string_view yin(p, 2);
+        std::string_view yin2(p, 3);
+
+        auto iter = PhoneticConvert::phoneticConvertMap->find(yin);
+        if(iter != PhoneticConvert::phoneticConvertMap->cend()){
+            tone2.append(iter->second);
+            p+= iter->first.length();
+            continue;
+        }
+
+        auto iter2 = PhoneticConvert::phoneticConvertMap->find(yin2);
+        if(iter2 != PhoneticConvert::phoneticConvertMap->cend()){
+            tone2.append(iter2->second);
+            p+= iter2->first.length();
+            continue;
+        }
+
+        tone2.push_back(*p);
+        p++;
+    }
+    return tone2;
+}
+
+
+std::string PhoneticConvert::to_tone3(const char *pinyin){
+
+}
+
