@@ -11,6 +11,7 @@ class PinyinDict
 public:
 
     PinyinDict();
+    ~PinyinDict();
 
     int loadFile(const char* filename);
     Pinyins getPinyins(char32_t unichar) const;
