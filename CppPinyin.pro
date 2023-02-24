@@ -6,8 +6,11 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
         phoneticconvert.cpp \
-        pinyindict.cpp
+        pinyindict.cpp \
+        pinyintools.cpp
 
 HEADERS += \
     phoneticconvert.h \
-    pinyindict.h
+    pinyin_common.h \
+    pinyindict.h \
+    pinyintools.h

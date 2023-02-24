@@ -42,14 +42,14 @@ int PinyinDict::loadFile(const char* filename){
 
             //std::cout << uniChar << ":" << pos << std::endl;
 
-            std::list<std::string> pinyinList;
+            Pinyins pinyinList;
             const char* PinyinStart = pos;
             while(*pos != '#' && *pos != '\0'){
                 pos++;
 
                 while(*pos == ',' || std::isblank(*pos)){
                     if(pos != PinyinStart){
-                        std::string pinyin(PinyinStart, pos-PinyinStart);
+                        Pinyin pinyin(PinyinStart, pos-PinyinStart);
                         pinyinList.push_back(pinyin);
                     }
 
@@ -59,7 +59,7 @@ int PinyinDict::loadFile(const char* filename){
             }
 
             if(pos != PinyinStart){
-                std::string pinyin(PinyinStart, pos-PinyinStart);
+                Pinyin pinyin(PinyinStart, pos-PinyinStart);
                 pinyinList.push_back(pinyin);
             }
             if(not pinyinList.empty()){
@@ -72,7 +72,7 @@ int PinyinDict::loadFile(const char* filename){
 }
 
 
-PinyinDict::Pinyins PinyinDict::getPinyins(char32_t unichar){
+Pinyins PinyinDict::getPinyins(char32_t unichar) const{
     auto iter = this->data.find(unichar);
     if(iter == this->data.cend()){
         return {};
@@ -80,19 +80,6 @@ PinyinDict::Pinyins PinyinDict::getPinyins(char32_t unichar){
     return iter->second;
 }
 
-
-PinyinDict::Pinyins PinyinDict::getPinyinsTone2(char32_t unichar){
-
-}
-
-
-std::list<PinyinDict::Pinyins> PinyinDict::getPinyinsList(std::u32string_view unistring){
-    std::list<Pinyins> pinyinsList;
-    for(char32_t unichar : unistring){
-        pinyinsList.push_back(this->getPinyins(unichar));
-    }
-    return pinyinsList;
-}
 
 
 void PinyinDict::printDict(){
@@ -109,10 +96,3 @@ void PinyinDict::printDict(){
     }
 }
 
-
-void PinyinDict::printPinyins(Pinyins pinyins){
-    for(Pinyin pinyin : pinyins){
-        std::cout << pinyin << ", ";
-    }
-    std::cout << "; ";
-}

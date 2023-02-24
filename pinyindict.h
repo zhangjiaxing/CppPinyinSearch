@@ -3,25 +3,18 @@
 
 #include <list>
 #include <map>
+#include "pinyin_common.h"
 
 
 class PinyinDict
 {
 public:
-    typedef std::string Pinyin;
-    typedef std::list<std::string> Pinyins;
 
     PinyinDict();
 
     int loadFile(const char* filename);
-    Pinyins getPinyins(char32_t unichar);
-    Pinyins getPinyinsTone2(char32_t unichar);
-
-    std::list<Pinyins> getPinyinsList(std::u32string_view unistring);
-
+    Pinyins getPinyins(char32_t unichar) const;
     void printDict();
-    static void printPinyins(Pinyins pinyins);
-
 private:
     std::map<char32_t, Pinyins> data;
 
