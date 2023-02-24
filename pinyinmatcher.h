@@ -11,7 +11,8 @@ public:
     ~PinyinMatcher();
 
     int loadDictFile(const char* filename);
-    int matchText(const char*pinyinSequence, const std::u32string_view text);
+    int matchText(const char*pinyinSequence, const std::u32string_view &text);
+    int matchTextList(const char *pinyinSequence, std::list<const std::u32string_view> &textList);
 
 private:
     PinyinDict dict;

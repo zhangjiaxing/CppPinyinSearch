@@ -81,3 +81,20 @@ void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, Ton
     std::cout << std::endl;
 }
 
+#include <locale>
+std::string fromString32(std::u32string_view u32str){
+    typedef std::codecvt<char32_t, char, std::mbstate_t> Cvt;
+    const Cvt &cvt = std::use_facet<Cvt>(std::locale());
+
+    std::mbstate_t state {};
+    const char32_t *start = u32str.data();
+    const char32_t *end = &u32str.data()[u32str.length()];
+    const char32_t *pos = nullptr;
+
+    char utf8str[100]{};
+    char *utf8pos;
+    cvt.out(state, start, end, pos, utf8str, utf8str+100, utf8pos);
+
+    *utf8pos = '\0';
+    return std::string(utf8str);
+}
