@@ -13,12 +13,12 @@
 Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneType){
     Pinyins pinyins = dict->getPinyins(unichar);
     Pinyins toneList;
-    PhoneticConvert phoneticConv;
 
+    PhoneticConvert *PhoneConverter = PhoneticConvert::instance();
     if(toneType == ToneType::ToneNone){
         std::set<Pinyin> pinyinSet;
         for(Pinyin pinyin : pinyins){
-            pinyinSet.insert(phoneticConv.to_tone0(pinyin.c_str()));
+            pinyinSet.insert(PhoneConverter->to_tone0(pinyin.c_str()));
         }
         for(Pinyin pinyin : pinyinSet){
             toneList.push_back(pinyin);
@@ -29,11 +29,11 @@ Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneTy
         }
     }else if(toneType == ToneType::ToneNumber){
         for(Pinyin pinyin : pinyins){
-            toneList.push_back(phoneticConv.to_tone2(pinyin.c_str()));
+            toneList.push_back(PhoneConverter->to_tone2(pinyin.c_str()));
         }
     }else{ //toneType == ToneType::ToneNumber2
         for(Pinyin pinyin : pinyins){
-            toneList.push_back(phoneticConv.to_tone3(pinyin.c_str()));
+            toneList.push_back(PhoneConverter->to_tone3(pinyin.c_str()));
         }
     }
 
@@ -80,5 +80,4 @@ void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, Ton
     }
     std::cout << std::endl;
 }
-
 
