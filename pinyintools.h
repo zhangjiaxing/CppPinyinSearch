@@ -13,6 +13,9 @@ std::list<Pinyins> getPinyinsTone2List(const PinyinDict *dict, std::u32string_vi
 std::list<Pinyins> getPinyinsTone3List(const PinyinDict *dict, std::u32string_view unistring);
 
 void printPinyins(Pinyins pinyins);
+void printPinyinsList(std::list<Pinyins> pinyinsList);
+void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring);
+
 
 
 #endif // PINYINTOOLS_H

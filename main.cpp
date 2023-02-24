@@ -9,6 +9,8 @@ using namespace std;
 
 int main()
 {
+    setlocale(LC_ALL, "en_US.utf8");
+
     PinyinDict pyDic;
     pyDic.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
@@ -26,12 +28,9 @@ int main()
 
 
     auto pinyinsList = getPinyinsTone3List(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
-
     std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
-    for(Pinyins pinyins : pinyinsList){
-        printPinyins(pinyins);
-    }
-    std::cout << std::endl;
+    printPinyinsList(pinyinsList);
 
+    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
     return 0;
 }
