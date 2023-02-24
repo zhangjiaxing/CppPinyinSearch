@@ -1,8 +1,6 @@
 #include <iostream>
 #include "pinyindict.h"
-#include "phoneticconvert.h"
 #include "pinyintools.h"
-
 
 
 using namespace std;
@@ -14,28 +12,17 @@ int main()
     PinyinDict pyDic;
     pyDic.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
-    //py.printDict();
-    Pinyins pinyins = pyDic.getPinyins(U'张');
-    //py.printPinyins(pinyins);
-    std::cout << "pinyin:\t" << pinyins.front() << std::endl;
-
-    PhoneticConvert pconv;
-    auto tone2 = pconv.to_tone2(pinyins.back().data());
-    std::cout << "tone2:\t" << tone2 << std::endl;
-
-    auto tone3 = pconv.to_tone3(pinyins.back().data());
-    std::cout << "tone3:\t" << tone3 << std::endl;
-    std::cout << std::endl;
-
-    //auto pinyinsList = getPinyinsTone3List(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
+    //auto pinyinsList = getPinyinsList(&pyDic, U"朝辞白帝彩云间，\n千里江陵一日还。");
     //std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
     //printPinyinsList(pinyinsList);
 
-    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneMark);
+    printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNone);
     std::cout << std::endl;
-    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneNumber);
+    printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneMark);
     std::cout << std::endl;
-    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneNumber2);
+    printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber);
+    std::cout << std::endl;
+    printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber2);
     std::cout << std::endl;
     return 0;
 }

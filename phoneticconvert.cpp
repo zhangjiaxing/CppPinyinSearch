@@ -55,6 +55,21 @@ PhoneticConvert::PhoneticConvert()
 }
 
 
+Pinyin PhoneticConvert::to_tone0(const char *pinyin){
+    Pinyin tone2 = to_tone2(pinyin);
+    Pinyin tone0;
+
+    const char *yin = tone2.c_str();
+    while(*yin != '\0'){
+        if(not isdigit(*yin)){
+            tone0.push_back(*yin);
+        }
+        yin++;
+    }
+    return tone0;
+}
+
+
 Pinyin PhoneticConvert::to_tone2(const char *pinyin){
     Pinyin tone2;
     const char *p = pinyin;

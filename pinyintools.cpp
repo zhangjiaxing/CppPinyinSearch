@@ -16,8 +16,6 @@ Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneTy
     PhoneticConvert phoneticConv;
 
     if(toneType == ToneType::ToneNone){
-        //TODO
-        /*
         std::set<Pinyin> pinyinSet;
         for(Pinyin pinyin : pinyins){
             pinyinSet.insert(phoneticConv.to_tone0(pinyin.c_str()));
@@ -25,7 +23,6 @@ Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneTy
         for(Pinyin pinyin : pinyinSet){
             toneList.push_back(pinyin);
         }
-        */
     }else if(toneType == ToneType::ToneMark){
         for(Pinyin pinyin : pinyins){
             toneList.push_back(pinyin.c_str());
