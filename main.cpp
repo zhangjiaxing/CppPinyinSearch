@@ -12,16 +12,15 @@ int main()
     py.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
     //py.printDict();
-    PinyinDict::Pinyins pinyins = py.getPinyins(U'长');
+    PinyinDict::Pinyins pinyins = py.getPinyins(U'张');
     //py.printPinyins(pinyins);
-    std::cout << "pinyin:\t" << pinyins.front() << std::endl;
-
+    std::cout << "pinyin:\t" << pinyins.back() << std::endl;
 
     PhoneticConvert pconv;
-    auto tone2 = pconv.to_tone2(pinyins.front().c_str());
+    auto tone2 = pconv.to_tone2(pinyins.back().c_str());
     std::cout << "tone2:\t" << tone2 << std::endl;
 
-    auto tone3 = pconv.to_tone3(pinyins.front().c_str());
+    auto tone3 = pconv.to_tone3(pinyins.back().c_str());
     std::cout << "tone3:\t" << tone3 << std::endl;
 
 

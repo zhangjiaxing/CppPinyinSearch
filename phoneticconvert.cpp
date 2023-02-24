@@ -1,5 +1,7 @@
 #include "phoneticconvert.h"
 #include <iostream>
+#include <cstring>
+
 
 //const PhoneticConvert::_PhoneticConvertData *PhoneticConvert::phoneticConvertList = nullptr;
 std::map<const std::string_view, const char*> *PhoneticConvert::phoneticConvertMap = nullptr;
@@ -58,9 +60,11 @@ PhoneticConvert::PhoneticConvert()
 std::string PhoneticConvert::to_tone2(const char *pinyin){
     std::string tone2;
     const char *p = pinyin;
+    int tune1Len = strlen("ā");
+    int tune2Len = strlen("m̄");
     while(*p != '\0'){
-        std::string_view yin(p, 2);
-        std::string_view yin2(p, 3);
+        std::string_view yin(p, tune1Len);
+        std::string_view yin2(p, tune2Len);
 
         auto iter = PhoneticConvert::phoneticConvertMap->find(yin);
         if(iter != PhoneticConvert::phoneticConvertMap->cend()){
