@@ -3,7 +3,6 @@
 #include <cstring>
 
 
-//const PhoneticConvert::_PhoneticConvertData *PhoneticConvert::phoneticConvertList = nullptr;
 std::map<const std::string_view, const char*> *PhoneticConvert::phoneticConvertMap = nullptr;
 
 
@@ -49,7 +48,6 @@ PhoneticConvert::PhoneticConvert()
         {"ề", "ê4"},
     };
 
-    //PhoneticConvert::phoneticConvertList = _phoneticConvertList;
     PhoneticConvert::phoneticConvertMap = new std::map<const std::string_view, const char*>;
     for(struct _PhoneticConvertData d : _phoneticConvertList){
         (*PhoneticConvert::phoneticConvertMap)[d.from] = d.to;
@@ -57,8 +55,8 @@ PhoneticConvert::PhoneticConvert()
 }
 
 
-std::string PhoneticConvert::to_tone2(const char *pinyin){
-    std::string tone2;
+Pinyin PhoneticConvert::to_tone2(const char *pinyin){
+    Pinyin tone2;
     const char *p = pinyin;
     int tune1Len = strlen("ā");
     int tune2Len = strlen("m̄");
@@ -87,9 +85,9 @@ std::string PhoneticConvert::to_tone2(const char *pinyin){
 }
 
 
-std::string PhoneticConvert::to_tone3(const char *pinyin){
-    std::string tone2 = to_tone2(pinyin);
-    std::string tone3;
+Pinyin PhoneticConvert::to_tone3(const char *pinyin){
+    Pinyin tone2 = to_tone2(pinyin);
+    Pinyin tone3;
 
     const char *yin = tone2.c_str();
     const char *tune = nullptr;
