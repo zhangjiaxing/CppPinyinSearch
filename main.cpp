@@ -17,7 +17,7 @@ int main()
     //py.printDict();
     Pinyins pinyins = pyDic.getPinyins(U'张');
     //py.printPinyins(pinyins);
-    std::cout << "pinyin:\t" << pinyins.back() << std::endl;
+    std::cout << "pinyin:\t" << pinyins.front() << std::endl;
 
     PhoneticConvert pconv;
     auto tone2 = pconv.to_tone2(pinyins.back().data());
@@ -31,7 +31,11 @@ int main()
     //std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
     //printPinyinsList(pinyinsList);
 
-    printPinyinsList(&pyDic, U"春江潮水连海平，\n海上明月共潮生。");
+    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneMark);
+    std::cout << std::endl;
+    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneNumber);
+    std::cout << std::endl;
+    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，\n烟花三月下扬州。", ToneType::ToneNumber2);
     std::cout << std::endl;
     return 0;
 }

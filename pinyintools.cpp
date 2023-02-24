@@ -3,59 +3,55 @@
 #endif
 
 #include <iostream>
+#include <set>
 #include <uchar.h>
 #include "pinyintools.h"
 #include "pinyindict.h"
 #include "phoneticconvert.h"
 
 
-
-Pinyins getPinyinsTone2(const PinyinDict *dict, char32_t unichar){
+Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneType){
     Pinyins pinyins = dict->getPinyins(unichar);
-    Pinyins tone2List;
+    Pinyins toneList;
     PhoneticConvert phoneticConv;
-    for(Pinyin pinyin : pinyins){
-        tone2List.push_back(phoneticConv.to_tone2(pinyin.c_str()));
+
+    if(toneType == ToneType::ToneNone){
+        //TODO
+        /*
+        std::set<Pinyin> pinyinSet;
+        for(Pinyin pinyin : pinyins){
+            pinyinSet.insert(phoneticConv.to_tone0(pinyin.c_str()));
+        }
+        for(Pinyin pinyin : pinyinSet){
+            toneList.push_back(pinyin);
+        }
+        */
+    }else if(toneType == ToneType::ToneMark){
+        for(Pinyin pinyin : pinyins){
+            toneList.push_back(pinyin.c_str());
+        }
+    }else if(toneType == ToneType::ToneNumber){
+        for(Pinyin pinyin : pinyins){
+            toneList.push_back(phoneticConv.to_tone2(pinyin.c_str()));
+        }
+    }else{ //toneType == ToneType::ToneNumber2
+        for(Pinyin pinyin : pinyins){
+            toneList.push_back(phoneticConv.to_tone3(pinyin.c_str()));
+        }
     }
-    return tone2List;
+
+    return toneList;
 }
 
 
-Pinyins getPinyinsTone3(const PinyinDict *dict, char32_t unichar){
-    Pinyins pinyins = dict->getPinyins(unichar);
-    Pinyins tone3List;
-    PhoneticConvert phoneticConv;
-    for(Pinyin pinyin : pinyins){
-        tone3List.push_back(phoneticConv.to_tone3(pinyin.c_str()));
-    }
-    return tone3List;
-}
-
-
-std::list<Pinyins> getPinyinsList(const PinyinDict *dict, std::u32string_view unistring){
+std::list<Pinyins> getPinyinsList(const PinyinDict *dict, std::u32string_view unistring,  ToneType toneType){
     std::list<Pinyins> pinyinsList;
     for(char32_t unichar : unistring){
-        pinyinsList.push_back(dict->getPinyins(unichar));
+        pinyinsList.push_back(getPinyinsTone(dict, unichar, toneType));
     }
     return pinyinsList;
 }
 
-std::list<Pinyins> getPinyinsTone2List(const PinyinDict *dict, std::u32string_view unistring){
-    std::list<Pinyins> pinyinsList;
-    for(char32_t unichar : unistring){
-        pinyinsList.push_back(getPinyinsTone2(dict, unichar));
-    }
-    return pinyinsList;
-}
-
-
-std::list<Pinyins> getPinyinsTone3List(const PinyinDict *dict, std::u32string_view unistring){
-    std::list<Pinyins> pinyinsList;
-    for(char32_t unichar : unistring){
-        pinyinsList.push_back(getPinyinsTone3(dict, unichar));
-    }
-    return pinyinsList;
-}
 
 void printPinyins(Pinyins pinyins){
     for(Pinyin pinyin : pinyins){
@@ -73,14 +69,14 @@ void printPinyinsList(std::list<Pinyins> pinyinsList){
 }
 
 
-void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring){
+void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, ToneType toneType){
     mbstate_t state{};
     char outstr[MB_CUR_MAX+1];
     for(char32_t unichar : unistring){
         int rc = c32rtomb(outstr, unichar, &state);
         outstr[std::max(rc, 0)] = '\0';
         std::cout << outstr;
-        Pinyins pinyins = getPinyinsTone3(dict, unichar);
+        Pinyins pinyins = getPinyinsTone(dict, unichar, toneType);
         for(Pinyin pinyin : pinyins){
             std::cout << pinyin << " ";
         }
