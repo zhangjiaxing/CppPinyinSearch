@@ -25,12 +25,13 @@ int main()
 
     auto tone3 = pconv.to_tone3(pinyins.back().data());
     std::cout << "tone3:\t" << tone3 << std::endl;
+    std::cout << std::endl;
 
+    //auto pinyinsList = getPinyinsTone3List(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
+    //std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
+    //printPinyinsList(pinyinsList);
 
-    auto pinyinsList = getPinyinsTone3List(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
-    std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
-    printPinyinsList(pinyinsList);
-
-    printPinyinsList(&pyDic, U"故人西辞黄鹤楼，烟花三月下扬州。");
+    printPinyinsList(&pyDic, U"春江潮水连海平，\n海上明月共潮生。");
+    std::cout << std::endl;
     return 0;
 }

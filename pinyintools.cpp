@@ -78,8 +78,8 @@ void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring){
     char outstr[MB_CUR_MAX+1];
     for(char32_t unichar : unistring){
         int rc = c32rtomb(outstr, unichar, &state);
-        outstr[rc+1] = '\0';
-        std::cout << outstr << " ";
+        outstr[std::max(rc, 0)] = '\0';
+        std::cout << outstr;
         Pinyins pinyins = getPinyinsTone3(dict, unichar);
         for(Pinyin pinyin : pinyins){
             std::cout << pinyin << " ";

@@ -14,7 +14,3 @@ HEADERS += \
     pinyin_common.h \
     pinyindict.h \
     pinyintools.h
-
-
-CONFIG += link_pkgconfig
-PKGCONFIG += Qt5X11Extras
