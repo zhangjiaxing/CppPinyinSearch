@@ -1,6 +1,7 @@
 #include <iostream>
 #include "pinyindict.h"
 #include "pinyintools.h"
+#include "pinyinmatcher.h"
 
 
 using namespace std;
@@ -23,6 +24,13 @@ int main()
     printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber);
     std::cout << std::endl;
     printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber2);
+    std::cout << std::endl;
+
+    PinyinMatcher matcher;
+    matcher.loadDictFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
+    int matchRet = matcher.matchText("yqongql", U"欲穷千里目，\n更上一层楼。");
+
+    std::cout << "match: " << matchRet;
     std::cout << std::endl;
 
     return 0;

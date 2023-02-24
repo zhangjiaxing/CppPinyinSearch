@@ -12,6 +12,9 @@ PinyinDict::PinyinDict()
 
 }
 
+PinyinDict::~PinyinDict(){
+    //TODO
+}
 
 int PinyinDict::loadFile(const char* filename){
     std::ifstream pinyinFile;

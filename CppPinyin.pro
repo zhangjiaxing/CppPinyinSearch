@@ -7,10 +7,12 @@ SOURCES += \
         main.cpp \
         phoneticconvert.cpp \
         pinyindict.cpp \
+        pinyinmatcher.cpp \
         pinyintools.cpp
 
 HEADERS += \
     phoneticconvert.h \
     pinyincommon.h \
     pinyindict.h \
+    pinyinmatcher.h \
     pinyintools.h
