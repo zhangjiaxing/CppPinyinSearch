@@ -28,9 +28,21 @@ int main()
 
     PinyinMatcher matcher;
     matcher.loadDictFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
-    int matchRet = matcher.matchText("yqongql", U"欲穷千里目，\n更上一层楼。");
 
-    std::cout << "match: " << matchRet;
+    //int matchRet = matcher.matchText("yqongqlmlouabc", std::u32string_view(U"欲穷千里目，\n更上一层楼。"));
+    //std::cout << "match: " << matchRet;
+
+    std::list<const std::u32string_view> nameList;
+    nameList.push_back(U"蓝牙");
+    nameList.push_back(U"贪玩蓝月");
+    nameList.push_back(U"琅琊");
+    nameList.push_back(U"利用");
+    nameList.push_back(U"阿姨");
+    nameList.push_back(U"你好哇");
+
+
+    matcher.matchTextList("lay", nameList);
+
     std::cout << std::endl;
 
     return 0;
