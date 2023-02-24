@@ -3,7 +3,7 @@
 
 #include <string>
 #include <map>
-#include "pinyin_common.h"
+#include "pinyincommon.h"
 
 
 class PhoneticConvert
@@ -11,6 +11,7 @@ class PhoneticConvert
 public:
     PhoneticConvert();
 
+    static Pinyin to_tone0(const char *pinyin);
     static Pinyin to_tone2(const char *pinyin);
     static Pinyin to_tone3(const char *pinyin);
 

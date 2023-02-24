@@ -3,7 +3,7 @@
 
 #include <list>
 #include <map>
-#include "pinyin_common.h"
+#include "pinyincommon.h"
 
 
 class PinyinDict

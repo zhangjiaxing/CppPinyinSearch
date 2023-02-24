@@ -1,8 +1,9 @@
 #ifndef PINYINTOOLS_H
 #define PINYINTOOLS_H
 
-#include <pinyin_common.h>
+#include <pinyincommon.h>
 #include <pinyindict.h>
+
 
 enum ToneType {
     ToneNone, //张zhang
@@ -19,7 +20,6 @@ std::list<Pinyins> getPinyinsList(const PinyinDict *dict, std::u32string_view un
 void printPinyins(Pinyins pinyins);
 void printPinyinsList(std::list<Pinyins> pinyinsList);
 void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, ToneType toneType=ToneNone);
-
 
 
 #endif // PINYINTOOLS_H

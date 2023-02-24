@@ -11,6 +11,6 @@ SOURCES += \
 
 HEADERS += \
     phoneticconvert.h \
-    pinyin_common.h \
+    pinyincommon.h \
     pinyindict.h \
     pinyintools.h
