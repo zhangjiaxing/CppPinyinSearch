@@ -54,6 +54,11 @@ PhoneticConvert::PhoneticConvert()
     }
 }
 
+PhoneticConvert * PhoneticConvert::instance(){
+    static PhoneticConvert *phoneticConvert = new PhoneticConvert;
+    return phoneticConvert;
+}
+
 
 Pinyin PhoneticConvert::to_tone0(const char *pinyin){
     Pinyin tone2 = to_tone2(pinyin);

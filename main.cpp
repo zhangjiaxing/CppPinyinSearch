@@ -24,5 +24,6 @@ int main()
     std::cout << std::endl;
     printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber2);
     std::cout << std::endl;
+
     return 0;
 }

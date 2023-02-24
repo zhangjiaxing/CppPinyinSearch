@@ -9,13 +9,14 @@
 class PhoneticConvert
 {
 public:
-    PhoneticConvert();
-
+    static PhoneticConvert *instance();
     static Pinyin to_tone0(const char *pinyin);
     static Pinyin to_tone2(const char *pinyin);
     static Pinyin to_tone3(const char *pinyin);
 
 private:
+    PhoneticConvert();
+
     struct _PhoneticConvertData{
         const char* from;
         const char* to;
