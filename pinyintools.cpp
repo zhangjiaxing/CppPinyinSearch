@@ -1,5 +1,9 @@
-#include <iostream>
+#ifndef __STDC_UTF_32__
+#define __STDC_UTF_32__
+#endif
 
+#include <iostream>
+#include <uchar.h>
 #include "pinyintools.h"
 #include "pinyindict.h"
 #include "phoneticconvert.h"
@@ -55,8 +59,33 @@ std::list<Pinyins> getPinyinsTone3List(const PinyinDict *dict, std::u32string_vi
 
 void printPinyins(Pinyins pinyins){
     for(Pinyin pinyin : pinyins){
-        std::cout << pinyin << ", ";
+        std::cout << pinyin << " ";
     }
-    std::cout << "; ";
+    std::cout << " ";
 }
+
+
+void printPinyinsList(std::list<Pinyins> pinyinsList){
+    for(Pinyins pinyins : pinyinsList){
+        printPinyins(pinyins);
+    }
+    std::cout << std::endl;
+}
+
+
+void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring){
+    mbstate_t state{};
+    char outstr[MB_CUR_MAX+1];
+    for(char32_t unichar : unistring){
+        int rc = c32rtomb(outstr, unichar, &state);
+        outstr[rc+1] = '\0';
+        std::cout << outstr << " ";
+        Pinyins pinyins = getPinyinsTone3(dict, unichar);
+        for(Pinyin pinyin : pinyins){
+            std::cout << pinyin << " ";
+        }
+    }
+    std::cout << std::endl;
+}
+
 
