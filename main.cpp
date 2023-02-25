@@ -41,7 +41,7 @@ int main()
     nameList.push_back(U"你好哇");
 
 
-    matcher.matchTextList("lay", nameList);
+    matcher.matchTextList(&pyDic, "lay", nameList);
 
     std::cout << std::endl;
 
