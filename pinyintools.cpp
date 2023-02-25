@@ -4,7 +4,9 @@
 
 #include <iostream>
 #include <set>
-#include <uchar.h>
+#include <cuchar>
+#include <cassert>
+#include <climits>
 #include "pinyintools.h"
 #include "pinyindict.h"
 #include "phoneticconvert.h"
@@ -81,38 +83,37 @@ void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, Ton
     std::cout << std::endl;
 }
 
-#include <locale>
+
 std::string u32stringTostring(std::u32string_view u32str){
-    typedef std::codecvt<char32_t, char, std::mbstate_t> Cvt;
-    const Cvt &cvt = std::use_facet<Cvt>(std::locale());
-
-    std::mbstate_t state {};
-    const char32_t *start = u32str.data();
-    const char32_t *end = &u32str.data()[u32str.length()];
-    const char32_t *pos = nullptr;
-
-    char utf8str[u32str.length()*6];
-    char *utf8pos = nullptr;
-    cvt.out(state, start, end, pos, utf8str, utf8str+u32str.length()*6, utf8pos);
-
-    *utf8pos = '\0';
-    return std::string(utf8str);
+    std::mbstate_t state{};
+    char buffer[MB_LEN_MAX]{};
+    std::string outstr;
+    for(char32_t c32 : u32str)
+    {
+        std::size_t rc = std::c32rtomb(buffer, c32, &state);
+        if(rc != (std::size_t)-1){
+            outstr.append(buffer);
+        }
+    }
+    return outstr;
 }
 
 
 std::u32string stringToU32string(std::string_view str){
-    typedef std::codecvt<char32_t, char, std::mbstate_t> Cvt;
-    const Cvt &cvt = std::use_facet<Cvt>(std::locale());
-
     std::mbstate_t state {};
-    const char *start = str.data();
-    const char *end = &str.data()[str.length()];
-    const char *pos = nullptr;
+    const char *ptr = str.data();
+    const char *end = str.data() + str.size();
+    char32_t c32;
 
-    char32_t u32str[str.length()];
-    char32_t *u32pos = nullptr;
-    cvt.in(state, start, end, pos, u32str, u32str + str.length(), u32pos);
-    *u32pos = 0;
+    std::u32string u32str;
+    while(std::size_t rc = std::mbrtoc32(&c32, ptr, end - ptr, &state))
+    {
+      assert(rc != (std::size_t)-3); // no surrogates in UTF-32
+      if(rc == (std::size_t)-1) break;
+      if(rc == (std::size_t)-2) break;
+      ptr += rc;
+      u32str.push_back(c32);
+    }
 
-    return std::u32string(u32str);
+    return u32str;
 }

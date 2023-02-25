@@ -8,6 +8,8 @@ using namespace std;
 
 int main()
 {
+    std::setlocale(LC_ALL, "en_US.utf8");
+
     PinyinDict pyDic;
     pyDic.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
