@@ -7,18 +7,15 @@
 class PinyinMatcher
 {
 public:
-    PinyinMatcher();
+    PinyinMatcher(const PinyinDict *dict);
     ~PinyinMatcher();
-
-    int loadDictFile(const char* filename);
-
 
 
     static int matchText(const PinyinDict *dict, const char*pinyinSequence, const std::u32string_view &text);
     static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const std::u32string_view> &textList);
 
 private:
-    PinyinDict dict;
+    const PinyinDict *dict;
 };
 
 #endif // PINYINMATCHER_H
