@@ -20,8 +20,8 @@ public:
     int addText(const char *text);
 
 
-    static int matchText(const PinyinDict *dict, const char*pinyinSequence, const std::u32string_view &text);
-    static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const std::u32string_view> &textList);
+    static int matchText(const PinyinDict *dict, const char*pinyinSequence, const char *text);
+    static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const char *> &textList);
 
 private:
     const PinyinDict *dict;

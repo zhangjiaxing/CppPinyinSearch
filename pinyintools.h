@@ -15,7 +15,9 @@ enum ToneType {
 
 Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneType=ToneNone);
 
-std::list<Pinyins> getPinyinsList(const PinyinDict *dict, const std::u32string_view unistring, ToneType toneType=ToneNone);
+std::list<Pinyins> getPinyinsList(const PinyinDict *dict, const char *str, ToneType toneType=ToneNone);
+std::list<Pinyins> getPinyinsList(const PinyinDict *dict, std::u32string_view u32str,  ToneType toneType=ToneNone);
+
 
 void printPinyins(Pinyins pinyins);
 void printPinyinsList(std::list<Pinyins> pinyinsList);

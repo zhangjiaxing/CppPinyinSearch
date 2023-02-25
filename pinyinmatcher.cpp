@@ -24,7 +24,7 @@ int PinyinMatcher::addText(const char *text){
 
 
 
-int PinyinMatcher::matchText(const PinyinDict *dict, const char *pinyinSequence, const std::u32string_view &text){
+int PinyinMatcher::matchText(const PinyinDict *dict, const char *pinyinSequence, const char *text){
     const char *pinyinSequenceEnd = strchr(pinyinSequence, '\0');
     std::list<Pinyins> pinyinsList = getPinyinsList(dict, text, ToneType::ToneNone);
 
@@ -64,14 +64,12 @@ int PinyinMatcher::matchText(const PinyinDict *dict, const char *pinyinSequence,
 }
 
 
-int PinyinMatcher::matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const std::u32string_view> &textList){
+int PinyinMatcher::matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const char *> &textList){
     int matchCount = 0;
-    for(const std::u32string_view text: textList){
+    for(const char *text: textList){
         int ret = PinyinMatcher::matchText(dict, pinyinSequence, text);
         if(ret == 0){
-
-            std::cout << "match: " << u32stringTostring(text) << std::endl;
-
+            std::cout << "match: " << text << std::endl;
             matchCount++;
         }
     }
