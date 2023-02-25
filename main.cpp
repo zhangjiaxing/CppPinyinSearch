@@ -26,8 +26,7 @@ int main()
     printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNumber2);
     std::cout << std::endl;
 
-    PinyinMatcher matcher;
-    matcher.loadDictFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
+    PinyinMatcher matcher(&pyDic);
 
     //int matchRet = matcher.matchText("yqongqlmlouabc", std::u32string_view(U"欲穷千里目，\n更上一层楼。"));
     //std::cout << "match: " << matchRet;

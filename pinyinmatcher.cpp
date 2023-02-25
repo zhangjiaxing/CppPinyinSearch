@@ -5,16 +5,14 @@
 #include "phoneticconvert.h"
 
 
-PinyinMatcher::PinyinMatcher(){
-
+PinyinMatcher::PinyinMatcher(const PinyinDict *dict)
+{
+    this->dict = dict;
 }
+
 
 PinyinMatcher::~PinyinMatcher(){
 
-}
-
-int PinyinMatcher::loadDictFile(const char* filename){
-    return this->dict.loadFile(filename);
 }
 
 
