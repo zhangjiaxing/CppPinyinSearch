@@ -4,11 +4,20 @@
 #include "pinyindict.h"
 
 
+struct PinyinSearchCache {
+    struct PinyinSearchCache *code[26];
+    uint64_t ref;
+    void *data;
+};
+
+
 class PinyinMatcher
 {
 public:
     PinyinMatcher(const PinyinDict *dict);
     ~PinyinMatcher();
+
+    int addText(const char *text);
 
 
     static int matchText(const PinyinDict *dict, const char*pinyinSequence, const std::u32string_view &text);

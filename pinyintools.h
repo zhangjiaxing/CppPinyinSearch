@@ -21,6 +21,7 @@ void printPinyins(Pinyins pinyins);
 void printPinyinsList(std::list<Pinyins> pinyinsList);
 void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, ToneType toneType=ToneNone);
 
-std::string fromString32(std::u32string_view);
+std::string u32stringTostring(std::u32string_view);
+std::u32string stringToU32string(std::string_view);
 
 #endif // PINYINTOOLS_H

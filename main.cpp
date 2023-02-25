@@ -8,8 +8,6 @@ using namespace std;
 
 int main()
 {
-    setlocale(LC_ALL, "en_US.utf8");
-
     PinyinDict pyDic;
     pyDic.loadFile("/home/zhiliao/workspace/CppPinyin/pinyin.txt");
 
@@ -42,7 +40,9 @@ int main()
 
     matcher.matchTextList(&pyDic, "lay", nameList);
 
+    matcher.addText("朝辞白帝彩云间，\n千里江陵一日还。");
     std::cout << std::endl;
+
 
     return 0;
 }
