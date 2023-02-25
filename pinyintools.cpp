@@ -82,7 +82,7 @@ void printPinyinsList(const PinyinDict *dict, std::u32string_view unistring, Ton
 }
 
 #include <locale>
-std::string fromString32(std::u32string_view u32str){
+std::string u32stringTostring(std::u32string_view u32str){
     typedef std::codecvt<char32_t, char, std::mbstate_t> Cvt;
     const Cvt &cvt = std::use_facet<Cvt>(std::locale());
 
@@ -91,10 +91,28 @@ std::string fromString32(std::u32string_view u32str){
     const char32_t *end = &u32str.data()[u32str.length()];
     const char32_t *pos = nullptr;
 
-    char utf8str[100]{};
-    char *utf8pos;
-    cvt.out(state, start, end, pos, utf8str, utf8str+100, utf8pos);
+    char utf8str[u32str.length()*6];
+    char *utf8pos = nullptr;
+    cvt.out(state, start, end, pos, utf8str, utf8str+u32str.length()*6, utf8pos);
 
     *utf8pos = '\0';
     return std::string(utf8str);
+}
+
+
+std::u32string stringToU32string(std::string_view str){
+    typedef std::codecvt<char32_t, char, std::mbstate_t> Cvt;
+    const Cvt &cvt = std::use_facet<Cvt>(std::locale());
+
+    std::mbstate_t state {};
+    const char *start = str.data();
+    const char *end = &str.data()[str.length()];
+    const char *pos = nullptr;
+
+    char32_t u32str[str.length()];
+    char32_t *u32pos = nullptr;
+    cvt.in(state, start, end, pos, u32str, u32str + str.length(), u32pos);
+    *u32pos = 0;
+
+    return std::u32string(u32str);
 }
