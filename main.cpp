@@ -47,6 +47,7 @@ int main()
     std::u32string chengyu;
     const char32_t *chengyuPos = chengyuList;
     while(*chengyuPos != U'\0'){
+        //std::cout << chengyuPos;
         if(*chengyuPos == U' '){
             matcher.addText(chengyu);
             chengyu.clear();

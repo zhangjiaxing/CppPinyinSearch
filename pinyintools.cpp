@@ -102,7 +102,10 @@ std::string u32stringTostring(std::u32string_view u32str){
     {
         std::size_t rc = std::c32rtomb(buffer, c32, &state);
         if(rc != (std::size_t)-1){
+            buffer[rc] = '\0';
             outstr.append(buffer);
+        }else{
+            std::cerr << "u32stringTostring !!! ERROR";
         }
     }
     return outstr;
