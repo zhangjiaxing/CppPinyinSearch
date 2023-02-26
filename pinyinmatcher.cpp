@@ -35,7 +35,7 @@ void PinyinMatcher::_printTree(PinyinSearchTree *pos){
         return;
     }
     if(pos->text != nullptr){
-        std::cout << "[" << u32stringTostring(pos->text) << "]" << *(pos->text) << std::endl;
+        std::cout << "[" << u32stringTostring(pos->text) << "]" << std::endl;
     }
 
     for(int i=0; i<26; i++){
@@ -47,20 +47,17 @@ void PinyinMatcher::_printTree(PinyinSearchTree *pos){
 }
 
 
-int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer){
-    PinyinSearchTree *head = tree;
-    PinyinSearchTree *pinyinPos = head;
-
+int PinyinMatcher::_addText(PinyinSearchTree *head, std::u32string_view u32text, const char32_t *referer){
     if(u32text.empty()){
         return 0;
     }
-    std::cout << "_addText " << u32stringTostring(u32text) << std::endl;
+    //std::cout << "_addText " << u32stringTostring(u32text) << std::endl;
     std::u32string_view u32forward = u32text.substr(1);
 
     char32_t c32 = u32text.front();
     Pinyins pinyins = getPinyinsTone(this->dict, c32);
     for(Pinyin pinyin : pinyins){
-        pinyinPos = head;
+        PinyinSearchTree *pinyinPos = head;
         auto iter = pinyin.cbegin();
         while(iter != pinyin.cend()){
             char yin = *iter;
@@ -75,7 +72,7 @@ int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text,
         }
         if(u32forward.length() == 0){
             pinyinPos->text = referer;
-            std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
+            //std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
         }else{
             this->_addText(pinyinPos, u32forward, referer);
         }
@@ -86,7 +83,7 @@ int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text,
             this->_addText(head, u32forward, referer);
         }else{
             head->text = referer;
-            std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
+            //std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
         }
     }
 
