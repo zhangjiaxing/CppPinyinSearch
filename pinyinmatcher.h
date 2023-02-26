@@ -7,7 +7,7 @@
 struct PinyinSearchTree {
     struct PinyinSearchTree *code[26];
     uint64_t ref;
-    const char *text;
+    const char32_t *text;
 };
 
 
@@ -17,13 +17,13 @@ public:
     PinyinMatcher(const PinyinDict *dict);
     ~PinyinMatcher();
 
-    int addText(std::u32string_view u32text);
+    int addText(std::u32string_view u32text, const char32_t *referer);
 
     static int matchText(const PinyinDict *dict, const char*pinyinSequence, const char *text);
     static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const char *> &textList);
 
 private:
-    int _addText(PinyinSearchTree *tree, std::u32string_view u32text);
+    int _addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer);
 
     const PinyinDict *dict{};
     PinyinSearchTree *searchTree{};

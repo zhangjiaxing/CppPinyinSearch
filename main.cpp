@@ -42,14 +42,15 @@ int main()
 
     matcher.matchTextList(&pyDic, "lay", nameList);
 
-    matcher.addText(U"朝辞白帝彩云间，\n千里江陵一日还。");
+    const char32_t *s32 = U"朝辞白帝彩云间，\n千里江陵一日还。";
+    matcher.addText(s32, s32);
     const char32_t *chengyuList = U"爱屋及乌 爱惜羽毛 爱憎分明 碍手碍脚 碍足碍手 安邦定国 安不忘危 安家乐业 安家立业 安家落户 安居乐业 安老怀少";
     std::u32string chengyu;
     const char32_t *chengyuPos = chengyuList;
     while(*chengyuPos != U'\0'){
         //std::cout << chengyuPos;
         if(*chengyuPos == U' '){
-            matcher.addText(chengyu);
+            matcher.addText(chengyu, chengyuPos);
             chengyu.clear();
         }else{
             chengyu.push_back(*chengyuPos);
