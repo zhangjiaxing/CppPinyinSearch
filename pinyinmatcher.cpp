@@ -24,6 +24,26 @@ int PinyinMatcher::addText(std::u32string_view u32text, const char32_t *referer)
 }
 
 
+void PinyinMatcher::printTree(){
+    std::cout << std::endl << "printTree" << std::endl;
+    this->_printTree(this->searchTree);
+}
+
+
+void PinyinMatcher::_printTree(PinyinSearchTree *pos){
+    for(int i=0; i<26; i++){
+        if(pos->code[i] != nullptr){
+            if(pos->text != nullptr){
+                std::cout << u32stringTostring(pos->text) << std::endl;
+            }
+            std::cout << char('a' + i) << " ";
+            _printTree(pos->code[i]);
+
+        }
+    }
+}
+
+
 int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer){
     PinyinSearchTree *pos = tree;
 
@@ -39,8 +59,9 @@ int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text,
         while(iter != pinyin.cend()){
             char yin = *iter;
             if(pos->code[yin - 'a'] == nullptr){
+                //std::cout << "new PinyinSearchTree \n";
                 PinyinSearchTree *node = new PinyinSearchTree();
-                memset(tree, 0, sizeof *node);
+                memset(node, 0, sizeof *node);
                 pos->code[yin - 'a'] = node;
             }
             pos->ref++;
