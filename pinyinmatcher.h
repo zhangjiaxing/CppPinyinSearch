@@ -26,7 +26,7 @@ public:
     static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const char *> &textList);
 
 private:
-    int _addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer);
+    int _addText(PinyinSearchTree *head, std::u32string_view u32text, const char32_t *referer);
 
     const PinyinDict *dict{};
     PinyinSearchTree *searchTree{};

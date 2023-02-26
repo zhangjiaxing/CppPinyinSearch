@@ -16,7 +16,7 @@ int main()
     //auto pinyinsList = getPinyinsList(&pyDic, U"朝辞白帝彩云间，\n千里江陵一日还。");
     //std::cout << "故人西辞黄鹤楼，烟花三月下扬州。" << std::endl;
     //printPinyinsList(pinyinsList);
-    printPinyinsList(&pyDic, U"爱屋及乌爱惜羽毛爱憎分明", ToneType::ToneNone);
+    printPinyinsList(&pyDic, U"安家乐业", ToneType::ToneNone);
 
     printPinyinsList(&pyDic, U"欲穷千里目，\n更上一层楼。", ToneType::ToneNone);
     std::cout << std::endl;
@@ -44,8 +44,8 @@ int main()
     const char32_t *s32 = U"朝辞白帝彩云间，\n千里江陵一日还。";
     //matcher.addText(s32, s32);
 
-    //char32_t chengyuList[] = U"爱屋及乌 \0爱惜羽毛 爱憎分明 碍手碍脚 碍足碍手 安邦定国 安不忘危 安家乐业 安家立业 安家落户 安居乐业 安老怀少 ";
-    char32_t chengyuList[] = U"爱屋及乌。 爱惜羽毛- 爱憎分明 ";
+    char32_t chengyuList[] = U"爱屋及乌 爱惜羽毛 爱憎分明 碍手碍脚 碍足碍手 安邦定国 安不忘危 安家乐业 安家立业 安家落户 安居乐业 安老怀少 ";
+    //char32_t chengyuList[] = U"爱屋及乌。 爱惜羽毛- 爱憎分明 ";
     std::u32string chengyu;
     char32_t *chengyuPos = chengyuList;
     while(*chengyuPos != U'\0'){
