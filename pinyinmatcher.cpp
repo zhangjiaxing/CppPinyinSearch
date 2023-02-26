@@ -31,55 +31,65 @@ void PinyinMatcher::printTree(){
 
 
 void PinyinMatcher::_printTree(PinyinSearchTree *pos){
+    if(pos == nullptr){
+        return;
+    }
+    if(pos->text != nullptr){
+        std::cout << "[" << u32stringTostring(pos->text) << "]" << *(pos->text) << std::endl;
+    }
+
     for(int i=0; i<26; i++){
         if(pos->code[i] != nullptr){
-            if(pos->text != nullptr){
-                std::cout << u32stringTostring(pos->text) << std::endl;
-            }
-            std::cout << char('a' + i) << " ";
+            std::cout << char('a' + i) << "";
             _printTree(pos->code[i]);
-
         }
     }
 }
 
 
 int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer){
-    PinyinSearchTree *pos = tree;
+    PinyinSearchTree *head = tree;
+    PinyinSearchTree *pinyinPos = head;
 
     if(u32text.empty()){
         return 0;
     }
-
+    std::cout << "_addText " << u32stringTostring(u32text) << std::endl;
     std::u32string_view u32forward = u32text.substr(1);
+
     char32_t c32 = u32text.front();
     Pinyins pinyins = getPinyinsTone(this->dict, c32);
     for(Pinyin pinyin : pinyins){
+        pinyinPos = head;
         auto iter = pinyin.cbegin();
         while(iter != pinyin.cend()){
             char yin = *iter;
-            if(pos->code[yin - 'a'] == nullptr){
-                //std::cout << "new PinyinSearchTree \n";
+            if(pinyinPos->code[yin - 'a'] == nullptr){
                 PinyinSearchTree *node = new PinyinSearchTree();
                 memset(node, 0, sizeof *node);
-                pos->code[yin - 'a'] = node;
+                pinyinPos->code[yin - 'a'] = node;
             }
-            pos->ref++;
-            pos = pos->code[yin - 'a'];
+            pinyinPos->ref++;
+            pinyinPos = pinyinPos->code[yin - 'a'];
             iter++;
         }
-        if(u32forward.empty()){
-            pos->text = referer;
+        if(u32forward.length() == 0){
+            pinyinPos->text = referer;
+            std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
         }else{
-            this->_addText(pos, u32forward, referer);
+            this->_addText(pinyinPos, u32forward, referer);
         }
     }
-    if(pinyins.empty()){
-        this->_addText(pos, u32forward, referer);
-        if(u32forward.empty()){
-            pos->text = referer;
+
+    if(pinyins.size() == 0){
+        if(u32forward.length() != 0){
+            this->_addText(head, u32forward, referer);
+        }else{
+            head->text = referer;
+            std::cout << "text = referer " << referer << u32stringTostring(referer) << std::endl;
         }
     }
+
 
     return 0;
 }
