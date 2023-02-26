@@ -18,13 +18,13 @@ PinyinMatcher::~PinyinMatcher(){
 }
 
 
-int PinyinMatcher::addText(std::u32string_view u32text){
+int PinyinMatcher::addText(std::u32string_view u32text, const char32_t *referer){
     std::cout << u32stringTostring(u32text) << std::endl;
-    return this->_addText(this->searchTree, u32text);
+    return this->_addText(this->searchTree, u32text, referer);
 }
 
 
-int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text){
+int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text, const char32_t *referer){
     PinyinSearchTree *pos = tree;
 
     if(u32text.empty()){
@@ -47,10 +47,17 @@ int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text)
             pos = pos->code[yin - 'a'];
             iter++;
         }
-        this->_addText(pos, u32forward);
+        if(u32forward.empty()){
+            pos->text = referer;
+        }else{
+            this->_addText(pos, u32forward, referer);
+        }
     }
     if(pinyins.empty()){
-        this->_addText(pos, u32forward);
+        this->_addText(pos, u32forward, referer);
+        if(u32forward.empty()){
+            pos->text = referer;
+        }
     }
 
     return 0;
