@@ -19,6 +19,9 @@ public:
 
     int addText(std::u32string_view u32text, const char32_t *referer);
 
+    void printTree();
+    void _printTree(PinyinSearchTree *pos);
+
     static int matchText(const PinyinDict *dict, const char*pinyinSequence, const char *text);
     static int matchTextList(const PinyinDict *dict, const char *pinyinSequence, std::list<const char *> &textList);
 

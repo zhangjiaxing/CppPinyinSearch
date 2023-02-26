@@ -39,18 +39,19 @@ int main()
     nameList.push_back("阿姨");
     nameList.push_back("你好哇");
 
-
     matcher.matchTextList(&pyDic, "lay", nameList);
 
     const char32_t *s32 = U"朝辞白帝彩云间，\n千里江陵一日还。";
     matcher.addText(s32, s32);
-    const char32_t *chengyuList = U"爱屋及乌 爱惜羽毛 爱憎分明 碍手碍脚 碍足碍手 安邦定国 安不忘危 安家乐业 安家立业 安家落户 安居乐业 安老怀少";
+
+    char32_t chengyuList[] = U"爱屋及乌 爱惜羽毛 爱憎分明 碍手碍脚 碍足碍手 安邦定国 安不忘危 安家乐业 安家立业 安家落户 安居乐业 安老怀少";
     std::u32string chengyu;
-    const char32_t *chengyuPos = chengyuList;
+    char32_t *chengyuPos = chengyuList;
     while(*chengyuPos != U'\0'){
         //std::cout << chengyuPos;
         if(*chengyuPos == U' '){
-            matcher.addText(chengyu, chengyuPos);
+            *chengyuPos = U'\0';
+            matcher.addText(chengyu, chengyuPos-4);
             chengyu.clear();
         }else{
             chengyu.push_back(*chengyuPos);
@@ -59,6 +60,7 @@ int main()
         chengyuPos++;
     }
 
+    matcher.printTree();
     std::cout << std::endl;
 
 
