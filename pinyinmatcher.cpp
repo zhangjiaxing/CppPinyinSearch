@@ -1,5 +1,6 @@
 #include <cstring>
 #include <iostream>
+#include <stack>
 #include "pinyinmatcher.h"
 #include "pinyintools.h"
 #include "phoneticconvert.h"
@@ -8,6 +9,8 @@
 PinyinMatcher::PinyinMatcher(const PinyinDict *dict)
 {
     this->dict = dict;
+    this->searchTree = new PinyinSearchTree();
+    memset(this->searchTree, 1, sizeof *this->searchTree);
 }
 
 
@@ -16,9 +19,42 @@ PinyinMatcher::~PinyinMatcher(){
 }
 
 
-int PinyinMatcher::addText(const char *text){
-    std::u32string u32Text = stringToU32string(text);
-    printPinyinsList(this->dict, u32Text);
+int PinyinMatcher::addText(std::u32string_view u32text){
+    return this->_addText(this->searchTree, u32text);
+}
+
+
+int PinyinMatcher::_addText(PinyinSearchTree *tree, std::u32string_view u32text){
+    std::stack<PinyinSearchTree*> searchStack{};
+    PinyinSearchTree *pos = tree;
+    searchStack.push(pos);
+
+
+    if(u32text.empty()){
+        return 0;
+    }
+
+    std::u32string_view u32forward = u32text.substr(1);
+    char32_t c32 = u32text.front();
+    Pinyins pinyins = this->dict->getPinyins(c32);
+    for(Pinyin pinyin : pinyins){
+        auto iter = pinyin.cbegin();
+        while(iter != pinyin.cend()){
+            if(pos->code[*iter - 'a'] == nullptr){
+                PinyinSearchTree *node = new PinyinSearchTree();
+                memset(tree, 1, sizeof *node);
+                pos->code[*iter - 'a'] = node;
+            }
+            pos->ref++;
+            pos = pos->code[*iter - 'a'];
+            iter++;
+        }
+        this->_addText(pos, u32forward);
+    }
+    if(pinyins.empty()){
+        this->_addText(pos, u32forward);
+    }
+
     return 0;
 }
 
