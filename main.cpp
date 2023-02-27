@@ -98,7 +98,7 @@ void testChengyu(PinyinDict *dict){
     std::cout << std::endl;
     std::cout << std::endl;
 
-    std::list<const char32_t *> resultList = matcher.searchText("baibu", 10);
+    std::list<const char32_t *> resultList = matcher.searchText("zhutou", 10);
     for(const char32_t *text: resultList){
         std::cout << u32stringTostring(text) << std::endl;
     }

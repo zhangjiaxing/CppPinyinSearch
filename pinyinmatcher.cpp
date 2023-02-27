@@ -87,9 +87,18 @@ std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, 
     std::list<PinyinSearchTree*> nodeList;
 
     for(int i=0; i<26; i++){
-        if(pos->code[i] != nullptr){
-            if( i == *pinyinSequence - 'a'){
-                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence+1, limit);
+        int idx;
+        if(i == 0){
+            idx = *pinyinSequence - 'a';
+        }else if(i == *pinyinSequence - 'a'){
+            idx = 0;
+        }else{
+            idx = i;
+        }
+
+        if(pos->code[idx] != nullptr){
+            if( idx == *pinyinSequence - 'a'){
+                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[idx], pinyinSequence+1, limit);
                 for(PinyinSearchTree *node : matchList){
                     limit -= node->ref;
                     if(limit <= 0){
@@ -102,7 +111,7 @@ std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, 
                 }
 
             }else{
-                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence);
+                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[idx], pinyinSequence);
                 for(PinyinSearchTree *node : matchList){
                     limit -= node->ref;
                     if(limit <= 0){
