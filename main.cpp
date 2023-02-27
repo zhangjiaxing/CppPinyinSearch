@@ -72,7 +72,7 @@ void testMatcher(PinyinDict *dict){
 }
 
 
-void testChengyu(PinyinDict *dict){
+void testChengyusousuo(PinyinDict *dict){
 
     std::list<std::u32string> chengyuList{};
 
@@ -85,7 +85,7 @@ void testChengyu(PinyinDict *dict){
 
     std::string line;
     while(std::getline(chengyuFile, line)){
-        const std::u32string &chengyu = stringToU32string(line);
+        const std::u32string &chengyu = stringTou32string(line);
         chengyuList.push_back(chengyu);
     }
 
@@ -94,15 +94,57 @@ void testChengyu(PinyinDict *dict){
         matcher.addText(chengyu, chengyu.data());
     }
 
-    std::cout << std::endl;
-    std::cout << std::endl;
-    std::cout << std::endl;
-
     std::list<const char32_t *> resultList = matcher.searchText("zhutou", 10);
     for(const char32_t *text: resultList){
         std::cout << u32stringTostring(text) << std::endl;
     }
     std::cout << std::endl;
+}
+
+
+void testChengyujielong(PinyinDict *dict){
+    std::list<std::u32string> chengyuList{};
+
+    std::ifstream chengyuFile;
+    chengyuFile.open("/home/zhiliao/workspace/CppPinyin/test/chengyu.txt", std::ios::in);
+    if (!chengyuFile.is_open()) {
+      std::cout << "文件打开失败" << std::endl;
+      return;
+    }
+
+    std::string line;
+    while(std::getline(chengyuFile, line)){
+        const std::u32string &chengyu = stringTou32string(line);
+        chengyuList.push_back(chengyu);
+    }
+
+    PinyinMatcher matcher(dict);
+    for(const std::u32string &chengyu : chengyuList){
+        matcher.addText(chengyu, chengyu.data());
+    }
+
+    while(true){
+        string hanzi;
+        cout << "请输入需要接龙的成语或汉字：";
+        if(not (cin >> hanzi)){
+            break;
+        }
+
+        u32string u32hanzi = stringTou32string(hanzi);
+        Pinyins pinyins = getPinyinsTone(dict, u32hanzi.back());
+        if(pinyins.size() > 1){
+            cout << u32stringTostring(&u32hanzi[u32hanzi.length()-1]) << "是多音字！" << endl;
+        }
+        for(Pinyin pinyin : pinyins){
+            cout << pinyin << "开头的成语：" << endl;
+            std::list<const char32_t *> resultList = matcher.searchText(pinyin.c_str(), 10);
+            for(const char32_t *text: resultList){
+                std::cout << u32stringTostring(text) << std::endl;
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+    }
 }
 
 
@@ -116,7 +158,8 @@ int main()
     //testPrintPinyinsList(&dict);
     //testMatchTextList(&dict);
     //testMatcher(&dict);
-    testChengyu(&dict);
+    //testChengyusousuo(&dict);
+    testChengyujielong(&dict);
 
     return 0;
 }

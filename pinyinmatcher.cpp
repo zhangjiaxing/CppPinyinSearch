@@ -66,10 +66,14 @@ std::list<const char32_t *> PinyinMatcher::searchText(const char*pinyinSequence,
         {
             resultSet.insert(result);
             retList.push_back(result);
+
+            if((int)retList.size() >= limit){
+                break;
+            }
         }
     }
 
-    std::cout << __FUNCTION__ << "found " << retList.size() << " items." << std::endl;
+    //std::cout << __FUNCTION__ << "found " << retList.size() << " items." << std::endl;
 
     return retList;
 }

@@ -45,7 +45,7 @@ Pinyins getPinyinsTone(const PinyinDict *dict, char32_t unichar, ToneType toneTy
 
 std::list<Pinyins> getPinyinsList(const PinyinDict *dict, const char *str,  ToneType toneType){
     std::list<Pinyins> pinyinsList;
-    std::u32string unistring = stringToU32string(str);
+    std::u32string unistring = stringTou32string(str);
     for(char32_t unichar : unistring){
         pinyinsList.push_back(getPinyinsTone(dict, unichar, toneType));
     }
@@ -112,7 +112,7 @@ std::string u32stringTostring(std::u32string_view u32str){
 }
 
 
-std::u32string stringToU32string(std::string_view str){
+std::u32string stringTou32string(std::string_view str){
     std::mbstate_t state {};
     const char *ptr = str.data();
     const char *end = str.data() + str.size();
