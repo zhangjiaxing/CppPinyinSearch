@@ -6,9 +6,9 @@
 
 
 struct PinyinSearchTree {
-    struct PinyinSearchTree *code[26];
+    struct PinyinSearchTree *code[26]; //拼音展开的字母序列
     uint64_t ref;
-    const char32_t *text;
+    const char32_t *text; //如果text不是NULL，则指向某条文本
 };
 
 
