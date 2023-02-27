@@ -2,6 +2,7 @@
 #define PINYINMATCHER_H
 
 #include "pinyindict.h"
+#include <list>
 
 
 struct PinyinSearchTree {
@@ -18,6 +19,10 @@ public:
     ~PinyinMatcher();
 
     int addText(std::u32string_view u32text, const char32_t *referer);
+
+    std::list<char32_t *> searchText(const char*pinyinSequence, int limit=0);
+
+    std::list<PinyinSearchTree *> _searchText(PinyinSearchTree *pos, const char*pinyinSequence);
 
     void printTree();
     void _printTree(PinyinSearchTree *pos);

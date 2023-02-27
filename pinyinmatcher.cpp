@@ -24,6 +24,37 @@ int PinyinMatcher::addText(std::u32string_view u32text, const char32_t *referer)
 }
 
 
+std::list<char32_t *> searchText(const char*pinyinSequence, int limit){
+
+}
+
+
+std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, const char*pinyinSequence){
+    if(pos == nullptr || pinyinSequence == nullptr){
+        return{};
+    }
+    if(*pinyinSequence == '\0'){
+        return {pos};
+    }
+
+    std::list<PinyinSearchTree*> nodeList;
+
+    for(int i=0; i<26; i++){
+        if(pos->code[i] != nullptr){
+            if( i-'a' == *pinyinSequence){
+                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence+1);
+                nodeList.merge(matchList);
+            }else{
+                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence);
+                nodeList.merge(matchList);
+            }
+        }
+    }
+
+    return nodeList;
+}
+
+
 void PinyinMatcher::printTree(){
     std::cout << std::endl << "printTree" << std::endl;
     this->_printTree(this->searchTree);
@@ -40,7 +71,7 @@ void PinyinMatcher::_printTree(PinyinSearchTree *pos){
 
     for(int i=0; i<26; i++){
         if(pos->code[i] != nullptr){
-            std::cout << char('a' + i) << "";
+            std::cout << char('a' + i) << pos->code[i]->ref << " ";
             _printTree(pos->code[i]);
         }
     }
