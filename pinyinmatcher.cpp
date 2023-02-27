@@ -24,15 +24,46 @@ int PinyinMatcher::addText(std::u32string_view u32text, const char32_t *referer)
 }
 
 
-std::list<char32_t *> searchText(const char*pinyinSequence, int limit){
+std::list<PinyinSearchTree*> PinyinMatcher::expandTree(PinyinSearchTree *pos){
+    if(pos == nullptr){
+        return {};
+    }
 
+    std::list<PinyinSearchTree*> expandTreeList{};
+
+    if(pos->text != nullptr){
+        expandTreeList.push_back(pos);
+    }
+
+    for(int i=0; i<26; i++){
+        if(pos->code[i] != nullptr){
+            expandTreeList.merge(this->expandTree(pos->code[i]));
+        }
+    }
+    return expandTreeList;
 }
 
 
-std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, const char*pinyinSequence){
-    if(pos == nullptr || pinyinSequence == nullptr){
+std::list<const char32_t *> PinyinMatcher::searchText(const char*pinyinSequence, int limit){
+    std::list<PinyinSearchTree*> searchResult = this->_searchText(this->searchTree, pinyinSequence, limit);
+    std::list<PinyinSearchTree*> expandSearchResult;
+    for(PinyinSearchTree *result : searchResult){
+        expandSearchResult.merge(this->expandTree(result));
+    }
+
+    std::list<const char32_t *> resultList;
+    for(PinyinSearchTree *res : expandSearchResult){
+        resultList.push_back(res->text);
+    }
+    return resultList;
+}
+
+
+std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, const char*pinyinSequence, int limit){
+    if(pos == nullptr || pinyinSequence == nullptr || limit < 0){
         return{};
     }
+
     if(*pinyinSequence == '\0'){
         return {pos};
     }
@@ -41,11 +72,17 @@ std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, 
 
     for(int i=0; i<26; i++){
         if(pos->code[i] != nullptr){
-            if( i-'a' == *pinyinSequence){
-                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence+1);
+            if( i == *pinyinSequence - 'a'){
+                std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence+1, limit);
+                for(PinyinSearchTree *node : matchList){
+                    limit -= node->ref;
+                }
                 nodeList.merge(matchList);
             }else{
                 std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence);
+                for(PinyinSearchTree *node : matchList){
+                    limit -= node->ref;
+                }
                 nodeList.merge(matchList);
             }
         }

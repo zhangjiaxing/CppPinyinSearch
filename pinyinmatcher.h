@@ -20,9 +20,10 @@ public:
 
     int addText(std::u32string_view u32text, const char32_t *referer);
 
-    std::list<char32_t *> searchText(const char*pinyinSequence, int limit=0);
+    std::list<PinyinSearchTree*> expandTree(PinyinSearchTree *pos);
+    std::list<const char32_t*> searchText(const char*pinyinSequence, int limit=0);
 
-    std::list<PinyinSearchTree *> _searchText(PinyinSearchTree *pos, const char*pinyinSequence);
+    std::list<PinyinSearchTree *> _searchText(PinyinSearchTree *pos, const char*pinyinSequence, int limit=10);
 
     void printTree();
     void _printTree(PinyinSearchTree *pos);
