@@ -46,6 +46,7 @@ std::list<PinyinSearchTree*> PinyinMatcher::expandTree(PinyinSearchTree *pos){
 
 
 std::list<const char32_t *> PinyinMatcher::searchText(const char*pinyinSequence, int limit){
+    std::cout << "search pinyin: " << pinyinSequence << " limit: " << limit << std::endl;
     std::list<PinyinSearchTree*> searchResult = this->_searchText(this->searchTree, pinyinSequence, limit);
     std::list<PinyinSearchTree*> expandSearchResult;
     for(PinyinSearchTree *result : searchResult){
@@ -61,7 +62,8 @@ std::list<const char32_t *> PinyinMatcher::searchText(const char*pinyinSequence,
     std::list<const char32_t *> retList;
 
     for(const char32_t *result : resultList){
-        if(resultSet.find(result) == resultSet.cend()){
+        if(resultSet.find(result) == resultSet.cend())
+        {
             resultSet.insert(result);
             retList.push_back(result);
         }
