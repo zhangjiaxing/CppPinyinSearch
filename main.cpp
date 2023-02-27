@@ -63,7 +63,7 @@ int main()
 
     matcher.printTree();
 
-    std::list<const char32_t *> resultList = matcher.searchText("abwangw", 10);
+    std::list<const char32_t *> resultList = matcher.searchText("alaohs", 10);
     for(const char32_t *text: resultList){
         std::cout << u32stringTostring(text) << std::endl;
     }
