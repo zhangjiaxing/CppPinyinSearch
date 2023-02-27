@@ -1,5 +1,6 @@
 #include <cstring>
 #include <iostream>
+#include <set>
 #include "pinyinmatcher.h"
 #include "pinyintools.h"
 #include "phoneticconvert.h"
@@ -19,7 +20,7 @@ PinyinMatcher::~PinyinMatcher(){
 
 
 int PinyinMatcher::addText(std::u32string_view u32text, const char32_t *referer){
-    std::cout << u32stringTostring(u32text) << std::endl;
+    //std::cout << u32stringTostring(u32text) << std::endl;
     return this->_addText(this->searchTree, u32text, referer);
 }
 
@@ -55,12 +56,25 @@ std::list<const char32_t *> PinyinMatcher::searchText(const char*pinyinSequence,
     for(PinyinSearchTree *res : expandSearchResult){
         resultList.push_back(res->text);
     }
-    return resultList;
+
+    std::set<const char32_t *> resultSet;
+    std::list<const char32_t *> retList;
+
+    for(const char32_t *result : resultList){
+        if(resultSet.find(result) == resultSet.cend()){
+            resultSet.insert(result);
+            retList.push_back(result);
+        }
+    }
+
+    std::cout << __FUNCTION__ << "found " << retList.size() << " items." << std::endl;
+
+    return retList;
 }
 
 
 std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, const char*pinyinSequence, int limit){
-    if(pos == nullptr || pinyinSequence == nullptr || limit < 0){
+    if(pos == nullptr || pinyinSequence == nullptr || limit <= 0){
         return{};
     }
 
@@ -76,14 +90,27 @@ std::list<PinyinSearchTree *> PinyinMatcher::_searchText(PinyinSearchTree *pos, 
                 std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence+1, limit);
                 for(PinyinSearchTree *node : matchList){
                     limit -= node->ref;
+                    if(limit <= 0){
+                        break;
+                    }
                 }
                 nodeList.merge(matchList);
+                if(limit <= 0){
+                    break;
+                }
+
             }else{
                 std::list<PinyinSearchTree*> matchList = this->_searchText(pos->code[i], pinyinSequence);
                 for(PinyinSearchTree *node : matchList){
                     limit -= node->ref;
+                    if(limit <= 0){
+                        break;
+                    }
                 }
                 nodeList.merge(matchList);
+                if(limit <= 0){
+                    break;
+                }
             }
         }
     }
