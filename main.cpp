@@ -7,6 +7,56 @@
 #include "utils.h"
 #include "searcher.h"
 
+// 成语数据文件路径
+static constexpr const char* kIdiomFile = "test/chengyu.txt";
+
+// 从文件加载成语列表
+static std::vector<std::u32string> load_idiom_list() {
+    std::ifstream file(kIdiomFile);
+    if (!file.is_open()) {
+        std::cerr << "错误：无法打开 " << kIdiomFile << std::endl;
+        return {};
+    }
+
+    std::vector<std::u32string> list;
+    std::string line;
+    while (std::getline(file, line)) {
+        if (!line.empty()) {
+            list.push_back(to_utf32(line));
+        }
+    }
+    return list;
+}
+
+// 检查拼音序列是否能完整匹配一段文本
+// 返回未匹配的字符数（0 表示完全匹配）
+static int match_pinyin(const Dictionary& dict,
+                        std::string_view pinyin,
+                        std::string_view text_utf8) {
+    const char* pinyin_end = pinyin.data() + pinyin.size();
+    std::u32string u32text = to_utf32(text_utf8);
+    const char* match_pos = pinyin.data();
+
+    for (char32_t ch : u32text) {
+        SyllableList syllables = dict.lookup(ch);
+        if (syllables.empty()) continue;
+
+        const char* best_match = match_pos;
+        for (const auto& syllable : syllables) {
+            Syllable stripped = tone::strip(syllable);
+            const char* sp = stripped.c_str();
+            const char* p = match_pos;
+            while (*p && *sp) {
+                if (*p == *sp) p++;
+                sp++;
+            }
+            if (p > best_match) best_match = p;
+        }
+        match_pos = best_match;
+    }
+    return static_cast<int>(pinyin_end - match_pos);
+}
+
 // ============================== 演示功能 ==============================
 
 // 演示 1：四种声调样式输出
@@ -44,7 +94,7 @@ static void demo_print_pinyins(const Dictionary& dict) {
 static void demo_match_list(const Dictionary& dict) {
     std::cout << "\n◆ 拼音匹配演示" << std::endl;
 
-    int ret = Searcher::match_pinyin(dict, "yqongqlmlouabc",
+    int ret = match_pinyin(dict, "yqongqlmlouabc",
                                      "欲穷千里目，\n更上一层楼。");
     std::cout << "  拼音 \"yqongqlmlouabc\" 匹配诗句 => "
               << (ret == 0 ? "✓ 完全匹配" : "✗ 未完全匹配") << std::endl;
@@ -60,7 +110,7 @@ static void demo_match_list(const Dictionary& dict) {
     std::cout << "  拼音 \"lay\" 匹配名称：" << std::endl;
     int match_count = 0;
     for (const auto& entry : names) {
-        int r = Searcher::match_pinyin(dict, "lay", entry.name);
+        int r = match_pinyin(dict, "lay", entry.name);
         if (r == 0) {
             std::cout << "    ✓ " << entry.name
                       << " (" << entry.pinyin << ")" << std::endl;
@@ -103,20 +153,8 @@ static void demo_trie_search(const Dictionary& dict) {
 static void demo_file_search(const Dictionary& dict) {
     std::cout << "\n◆ 文件搜索演示" << std::endl;
 
-    std::ifstream file("test/chengyu.txt");
-    if (!file.is_open()) {
-        std::cerr << "  错误：无法打开 test/chengyu.txt" << std::endl;
-        return;
-    }
-
-    std::vector<std::u32string> idiom_list;
-    std::string line;
-    while (std::getline(file, line)) {
-        if (!line.empty()) {
-            idiom_list.push_back(to_utf32(line));
-        }
-    }
-    file.close();
+    auto idiom_list = load_idiom_list();
+    if (idiom_list.empty()) return;
 
     Searcher searcher(dict);
     for (const auto& idiom : idiom_list) {
@@ -147,27 +185,15 @@ static void run_all_demos(const Dictionary& dict) {
     demo_trie_search(dict);
     demo_file_search(dict);
     std::cout << "\n演示结束，按 Enter 返回菜单..." << std::endl;
-    std::cin.get();
-    std::cin.get();
+    std::cin.ignore();  // 丢弃 >> 操作后残留的换行符
+    std::cin.get();     // 等待用户按 Enter
 }
 
 // ============================== 成语接龙 ==============================
 
 static void game_idiom_chain(const Dictionary& dict) {
-    std::ifstream file("test/chengyu.txt");
-    if (!file.is_open()) {
-        std::cerr << "错误：无法打开 test/chengyu.txt" << std::endl;
-        return;
-    }
-
-    std::vector<std::u32string> idiom_list;
-    std::string line;
-    while (std::getline(file, line)) {
-        if (!line.empty()) {
-            idiom_list.push_back(to_utf32(line));
-        }
-    }
-    file.close();
+    auto idiom_list = load_idiom_list();
+    if (idiom_list.empty()) return;
 
     Searcher searcher(dict);
     for (const auto& idiom : idiom_list) {
@@ -223,20 +249,8 @@ static void game_idiom_chain(const Dictionary& dict) {
 // ============================== 命令行搜索 ==============================
 
 static void cmd_search(const Dictionary& dict) {
-    std::ifstream file("test/chengyu.txt");
-    if (!file.is_open()) {
-        std::cerr << "错误：无法打开 test/chengyu.txt" << std::endl;
-        return;
-    }
-
-    std::vector<std::u32string> idiom_list;
-    std::string line;
-    while (std::getline(file, line)) {
-        if (!line.empty()) {
-            idiom_list.push_back(to_utf32(line));
-        }
-    }
-    file.close();
+    auto idiom_list = load_idiom_list();
+    if (idiom_list.empty()) return;
 
     Searcher searcher(dict);
     for (const auto& idiom : idiom_list) {

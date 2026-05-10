@@ -1,7 +1,22 @@
 #include "dictionary.h"
 #include <fstream>
 #include <iostream>
-#include <cstdlib>
+#include <charconv>
+
+namespace {
+
+// 去除字符串首尾空白
+std::string_view trim(std::string_view s) {
+    while (!s.empty() && (s.front() == ' ' || s.front() == '\t')) {
+        s.remove_prefix(1);
+    }
+    while (!s.empty() && (s.back() == ' ' || s.back() == '\t' || s.back() == '\r')) {
+        s.remove_suffix(1);
+    }
+    return s;
+}
+
+} // 匿名命名空间
 
 bool Dictionary::load(const std::string& filename) {
     std::ifstream file(filename);
@@ -11,9 +26,7 @@ bool Dictionary::load(const std::string& filename) {
     }
 
     std::string line;
-    int line_num = 0;
     while (std::getline(file, line)) {
-        line_num++;
         std::string_view sv = trim(line);
 
         // 跳过空行和注释行
@@ -33,11 +46,11 @@ bool Dictionary::load(const std::string& filename) {
         }
 
         std::string_view hex_part = sv.substr(2, colon_pos - 2);
-        char* end = nullptr;
-        char32_t code_point = static_cast<char32_t>(
-            std::strtoul(hex_part.data(), &end, 16));
-        if (end == hex_part.data()) {
-            continue;  // 没解析出数字
+        unsigned long code_point = 0;
+        auto result = std::from_chars(
+            hex_part.data(), hex_part.data() + hex_part.size(), code_point, 16);
+        if (result.ec != std::errc()) {
+            continue;  // 解析失败
         }
 
         // 解析冒号后的拼音列表
@@ -73,7 +86,7 @@ bool Dictionary::load(const std::string& filename) {
         }
 
         if (!syllables.empty()) {
-            data_[code_point] = std::move(syllables);
+            data_[static_cast<char32_t>(code_point)] = std::move(syllables);
         }
     }
 
@@ -89,12 +102,3 @@ SyllableList Dictionary::lookup(char32_t ch) const {
     return it->second;
 }
 
-std::string_view Dictionary::trim(std::string_view s) {
-    while (!s.empty() && (s.front() == ' ' || s.front() == '\t')) {
-        s.remove_prefix(1);
-    }
-    while (!s.empty() && (s.back() == ' ' || s.back() == '\t' || s.back() == '\r')) {
-        s.remove_suffix(1);
-    }
-    return s;
-}

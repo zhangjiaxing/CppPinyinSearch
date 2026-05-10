@@ -28,7 +28,7 @@ const ToneTable& table() {
 }
 
 // 尝试匹配 pos 处的带调字母，返回匹配字节数（2 或 3），无匹配返回 0
-int match_len(const std::string_view& s, size_t pos) {
+int match_len(std::string_view s, size_t pos) {
     for (int len = 3; len >= 2; --len) {
         if (pos + len <= s.size()) {
             auto key = s.substr(pos, len);

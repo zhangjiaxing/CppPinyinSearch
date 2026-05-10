@@ -21,20 +21,13 @@ public:
     void add(std::u32string_view text, const char32_t* id);
 
     // 查找拼音匹配的文本，空字符串返回空结果
-    std::vector<const char32_t*> find(std::string_view pinyin,
-                                      int max_results = 10) const;
-
-    // 检查拼音序列是否能完整匹配一段文本
-    // 返回未匹配的字符数（0 表示完全匹配）
-    static int match_pinyin(const Dictionary& dict,
-                            std::string_view pinyin,
-                            std::string_view text_utf8);
+    [[nodiscard]] std::vector<const char32_t*> find(std::string_view pinyin,
+                                                     int max_results = 10) const;
 
 private:
     struct Node {
-        Node* children[26] = {};  // a–z，按 letter - 'a' 索引
-        int ref_count = 0;        // 经过此节点的文本数
-        const char32_t* text = nullptr;  // 非空表示有文本在此结束
+        Node* children[26] = {};        // a–z，按 letter - 'a' 索引
+        const char32_t* text = nullptr;   // 非空表示有文本在此结束
     };
 
     // 递归将文本拼音插入 Trie

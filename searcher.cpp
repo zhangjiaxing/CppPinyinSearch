@@ -1,7 +1,6 @@
 #include "searcher.h"
 #include "dictionary.h"
 #include "tone.h"
-#include "utils.h"
 #include <set>
 
 Searcher::Searcher(const Dictionary& dict)
@@ -65,7 +64,6 @@ void Searcher::insert(Node* node, std::u32string_view text, size_t index,
             if (!current->children[idx]) {
                 current->children[idx] = create_node();
             }
-            current->ref_count++;
             current = current->children[idx];
         }
 
@@ -150,42 +148,4 @@ void Searcher::collect_texts(Node* node,
         collect_texts(child, results, remaining);
         if (remaining <= 0) return;
     }
-}
-
-int Searcher::match_pinyin(const Dictionary& dict,
-                           std::string_view pinyin,
-                           std::string_view text_utf8) {
-    const char* pinyin_end = pinyin.data() + pinyin.size();
-    std::u32string u32text = to_utf32(text_utf8);
-
-    const char* match_pos = pinyin.data();
-
-    for (char32_t ch : u32text) {
-        SyllableList syllables = dict.lookup(ch);
-        if (syllables.empty()) continue;  // 非汉字跳过
-
-        const char* best_match = match_pos;
-
-        for (const auto& syllable : syllables) {
-            Syllable stripped = tone::strip(syllable);
-            const char* syllable_ptr = stripped.c_str();
-            const char* p = match_pos;
-
-            // 贪心匹配：尽可能多地消耗匹配的字符
-            while (*p && *syllable_ptr) {
-                if (*p == *syllable_ptr) {
-                    p++;
-                }
-                syllable_ptr++;
-            }
-
-            if (p > best_match) {
-                best_match = p;
-            }
-        }
-
-        match_pos = best_match;
-    }
-
-    return static_cast<int>(pinyin_end - match_pos);
 }
